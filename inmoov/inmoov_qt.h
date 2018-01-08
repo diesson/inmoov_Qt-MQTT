@@ -9,10 +9,12 @@
 #include <QMainWindow>
 #include <QLabel>
 #include <QToolButton>
+#include <QtWidgets/QMessageBox>
 // MQTT
 #include <QtMqtt/QtMqtt>
 #include <QtMqtt/QMqttClient>
 #include <QtMqtt/QMqttTopicName>
+#include <QMqttClient>
 
 namespace Ui {
 class inmoov_qt;
@@ -40,6 +42,20 @@ private slots:
     void on_C_button_cancelar_clicked();
 
     void updateLogStateChange();
+
+    void on_R_button_conectar_clicked();
+
+    void brokerDisconnected();
+
+    void setClientPort(QString p);
+
+    void on_R_button_executar_clicked();
+
+    void on_R_button_ping_clicked();
+
+    void on_actionQuit_triggered();
+
+    void setDevice(const QByteArray &message, const QMqttTopicName &topic);
 
 private:
     Ui::inmoov_qt *ui;

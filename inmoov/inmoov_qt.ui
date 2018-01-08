@@ -13,7 +13,7 @@
   <property name="minimumSize">
    <size>
     <width>560</width>
-    <height>540</height>
+    <height>560</height>
    </size>
   </property>
   <property name="maximumSize">
@@ -63,7 +63,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>4</number>
       </property>
       <property name="usesScrollButtons">
        <bool>true</bool>
@@ -76,60 +76,6 @@
         <string>Robo</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3">
-        <item row="3" column="3">
-         <widget class="QPushButton" name="R_button_ping">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>100</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Ping</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="2" colspan="2">
-         <spacer name="verticalSpacer_3">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Expanding</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>0</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="3" column="4">
-         <widget class="QPushButton" name="R_button_configuracao">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>100</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Configuração</string>
-          </property>
-         </widget>
-        </item>
         <item row="2" column="2" colspan="3">
          <widget class="QPlainTextEdit" name="R_info">
           <property name="sizePolicy">
@@ -180,6 +126,9 @@ color: rgb(255, 255, 255);</string>
            </item>
            <item row="1" column="1">
             <widget class="QPushButton" name="R_button_executar">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -196,7 +145,7 @@ color: rgb(255, 255, 255);</string>
               <string>Executar</string>
              </property>
              <property name="checkable">
-              <bool>true</bool>
+              <bool>false</bool>
              </property>
             </widget>
            </item>
@@ -235,7 +184,8 @@ color: rgb(255, 255, 255);</string>
            <item row="0" column="0">
             <widget class="QLabel" name="status_label_D">
              <property name="styleSheet">
-              <string notr="true">color: rgb(207, 0, 0);</string>
+              <string notr="true">color: rgb(207, 0, 0);
+</string>
              </property>
              <property name="text">
               <string>●</string>
@@ -307,7 +257,7 @@ color: rgb(255, 255, 255);</string>
               <string>Conectar</string>
              </property>
              <property name="checkable">
-              <bool>true</bool>
+              <bool>false</bool>
              </property>
             </widget>
            </item>
@@ -349,17 +299,48 @@ color: rgb(255, 255, 255);</string>
           </layout>
          </widget>
         </item>
+        <item row="3" column="4">
+         <widget class="QPushButton" name="R_button_ping">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Ping</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="2" colspan="3">
+         <spacer name="verticalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Expanding</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>0</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="tab_direita">
        <attribute name="title">
         <string>Direita</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_6">
-        <item row="0" column="0">
-         <widget class="QDateEdit" name="dateEdit"/>
-        </item>
-       </layout>
+       <layout class="QGridLayout" name="gridLayout_6"/>
       </widget>
       <widget class="QWidget" name="tab_cabeca">
        <attribute name="title">
@@ -838,9 +819,58 @@ color: rgb(255, 255, 255);</string>
      <height>20</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>Tools</string>
+    </property>
+    <addaction name="actionConfiguracao"/>
+    <addaction name="actionQuit"/>
+   </widget>
+   <addaction name="menuTools"/>
   </widget>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Quit</string>
+   </property>
+  </action>
+  <action name="actionConfiguracao">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Configuração</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>R_edit_host</tabstop>
+  <tabstop>R_edit_port</tabstop>
+  <tabstop>R_button_conectar</tabstop>
+  <tabstop>R_button_novo</tabstop>
+  <tabstop>R_box_comandos</tabstop>
+  <tabstop>R_button_executar</tabstop>
+  <tabstop>C_opcao_esperar</tabstop>
+  <tabstop>C_opcao_observar</tabstop>
+  <tabstop>C_opcao_outros</tabstop>
+  <tabstop>C_box_cabeca</tabstop>
+  <tabstop>C_check_continuo</tabstop>
+  <tabstop>C_button_executar</tabstop>
+  <tabstop>C_button_cancelar</tabstop>
+  <tabstop>pushButton</tabstop>
+  <tabstop>pushButton_3</tabstop>
+  <tabstop>pushButton_2</tabstop>
+  <tabstop>pushButton_4</tabstop>
+  <tabstop>O_ativar_D</tabstop>
+  <tabstop>O_ativar_E</tabstop>
+  <tabstop>O_ativar_C</tabstop>
+  <tabstop>O_button_add</tabstop>
+  <tabstop>pushButton_6</tabstop>
+  <tabstop>C_info</tabstop>
+  <tabstop>R_info</tabstop>
+  <tabstop>pushButton_5</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -910,22 +940,6 @@ color: rgb(255, 255, 255);</string>
   <connection>
    <sender>R_button_executar</sender>
    <signal>toggled(bool)</signal>
-   <receiver>frame_2</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>488</x>
-     <y>203</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>428</x>
-     <y>140</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>R_button_executar</sender>
-   <signal>toggled(bool)</signal>
    <receiver>R_box_comandos</receiver>
    <slot>setDisabled(bool)</slot>
    <hints>
@@ -950,8 +964,24 @@ color: rgb(255, 255, 255);</string>
      <y>209</y>
     </hint>
     <hint type="destinationlabel">
-     <x>401</x>
+     <x>507</x>
      <y>444</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>R_button_executar</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frame_2</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>488</x>
+     <y>203</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>428</x>
+     <y>140</y>
     </hint>
    </hints>
   </connection>
