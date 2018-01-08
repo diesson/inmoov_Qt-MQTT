@@ -32,3 +32,5 @@ HEADERS += \
 
 FORMS += \
         inmoov_qt.ui
+
+QT += mqtt
