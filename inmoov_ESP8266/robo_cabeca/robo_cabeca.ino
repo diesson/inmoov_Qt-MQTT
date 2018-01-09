@@ -22,8 +22,8 @@
 #define A0    17
 
 // CONSTANTES
-const char* SSID = "Milton";                 //WiFi
-const char* PASSWORD = "27101995";          //WiFi
+const char* SSID = "";                 //WiFi
+const char* PASSWORD = "";          //WiFi
 const char* BROKER_MQTT = "192.168.0.15";  //MQTT
 int BROKER_PORT = 1883;                     //MQTT
 
