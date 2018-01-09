@@ -63,7 +63,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>4</number>
       </property>
       <property name="usesScrollButtons">
        <bool>true</bool>
@@ -265,9 +265,6 @@ color: rgb(255, 255, 255);</string>
             <widget class="QLineEdit" name="R_edit_host">
              <property name="inputMask">
               <string/>
-             </property>
-             <property name="text">
-              <string>192.168.0.15</string>
              </property>
             </widget>
            </item>
