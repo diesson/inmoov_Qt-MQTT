@@ -171,6 +171,7 @@ void inmoov_qt::on_R_button_executar_clicked(){
     if(ui->R_button_executar->text() == "Executar"){
 
         ui->R_button_executar->setText(tr("Parar"));
+        ui->C_button_executar->setEnabled(false);
 
         ui->R_info->clear();
         info = "Hostname: " + m_client->hostname() + " \t Port: " + QString::number(m_client->port()) + "\n";
@@ -190,7 +191,7 @@ void inmoov_qt::on_R_button_executar_clicked(){
     }else{
 
         ui->R_info->insertPlainText("**Execução cancelada.\n");
-
+        ui->C_button_executar->setEnabled(true);
 
         message = "stop";
         QString topic1 = "robo/cabeca";
@@ -213,6 +214,7 @@ void inmoov_qt::on_C_button_executar_toggled(bool checked){
     QByteArray message;
 
     ui->C_button_executar->setEnabled(false);
+    ui->R_button_executar->setEnabled(false);
     if(checked){
 
         ui->C_info->clear();
@@ -264,6 +266,7 @@ void inmoov_qt::on_C_button_executar_toggled(bool checked){
 void inmoov_qt::on_C_button_cancelar_clicked(){
 
     ui->C_info->insertPlainText("**Execução cancelada.\n");
+    ui->R_button_executar->setEnabled(true);
 
     QByteArray message = "stop";
     QString topic = "robo/cabeca";
