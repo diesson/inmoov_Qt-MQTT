@@ -25,12 +25,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        inmoov_qt.cpp
+        inmoov_qt.cpp \
+    newtab.cpp
 
 HEADERS += \
-        inmoov_qt.h
+        inmoov_qt.h \
+    newtab.h
 
 FORMS += \
-        inmoov_qt.ui
+        inmoov_qt.ui \
+    newtab.ui
 
 QT += mqtt

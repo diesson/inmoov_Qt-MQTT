@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string.h>
 #include <unistd.h>
+#include <sstream>
 // Qt
 #include <QMainWindow>
 #include <QLabel>

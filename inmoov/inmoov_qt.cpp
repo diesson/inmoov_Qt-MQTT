@@ -1,5 +1,6 @@
 #include "inmoov_qt.h"
 #include "ui_inmoov_qt.h"
+#include "newtab.h"
 
 inmoov_qt::inmoov_qt(QWidget *parent) :
     QMainWindow(parent),
@@ -15,8 +16,8 @@ inmoov_qt::inmoov_qt(QWidget *parent) :
     // Terminais de informacao para o usuario
     ui->C_info->setReadOnly(true);
     ui->R_info->setReadOnly(true);
-    //ui->D_info->setReadOnly(true);
-    //ui->E_info->setReadOnly(true);
+    ui->D_info->setReadOnly(true);
+    ui->E_info->setReadOnly(true);
 
     // Configuracao da conexao
     m_client = new QMqttClient(this);
@@ -128,36 +129,71 @@ void inmoov_qt::setClientPort(QString p){
 void inmoov_qt::setDevice(const QByteArray &message, const QMqttTopicName &topic){
 
     QString info;
+    QString recebido_Q;
     QByteArray retorno;
+    std::string recebido;
 
     info = "robo";
     if(topic == info){
-        if(message == "robo/cabeca"){
 
-            retorno = "conectado";
-            info = "robo/cabeca";
-            if(m_client->publish(info, retorno) != -1){
-                ui->tabWidget->setTabEnabled(2, true);
-                ui->status_label_C->setStyleSheet("color: rgb(85, 170, 0);");
+
+        char* msg = new char[message.toStdString().length()+1];
+        memcpy(msg, message.toStdString().c_str(), message.toStdString().length() + 1);
+
+        std::istringstream is(msg);
+        getline(is, recebido, '/');
+
+        if(recebido.compare("robo") == 0){
+
+            getline(is, recebido, '/');
+
+            if(recebido.compare("cabeca") == 0){
+
+                retorno = "conectado";
+                info = "robo/cabeca";
+                if(m_client->publish(info, retorno) != -1){
+                    ui->tabWidget->setTabEnabled(2, true);
+                    ui->status_label_C->setStyleSheet("color: rgb(85, 170, 0);");
+                }
+
+            }else if(recebido.compare("direita") == 0){
+
+                retorno = "conectado";
+                info = "robo/direita";
+                if(m_client->publish(info, retorno) != -1){
+                    ui->tabWidget->setTabEnabled(1, true);
+                    ui->status_label_D->setStyleSheet("color: rgb(85, 170, 0);");
+                }
+
+            }else if(recebido.compare("esquerda") == 0){
+
+                retorno = "conectado";
+                info = "robo/esquerda";
+                if(m_client->publish(info, retorno) != -1){
+                    ui->tabWidget->setTabEnabled(3, true);
+                    ui->status_label_E->setStyleSheet("color: rgb(85, 170, 0);");
+                }
+
+            }else{
+
+                recebido_Q = QString::fromStdString(recebido);
+                newTab *myNewTab = new newTab();
+
+                QFrame* caixa = new QFrame(myNewTab);
+                QRadioButton* Opcao_1 = new QRadioButton(caixa);
+                Opcao_1->setText(QString(recebido_Q));
+
+                ui->tabWidget->addTab(myNewTab, QString(recebido_Q));
+                if(getline(is, recebido, '/')){
+
+                    recebido_Q = QString::fromStdString(recebido);
+                    QRadioButton* opcao = new QRadioButton(caixa);
+                    opcao->setText(QString(recebido_Q));
+
+                }
+
             }
 
-        }else if(message == "robo/direita"){
-
-            retorno = "conectado";
-            info = "robo/direita";
-            if(m_client->publish(info, retorno) != -1){
-                ui->tabWidget->setTabEnabled(1, true);
-                ui->status_label_D->setStyleSheet("color: rgb(85, 170, 0);");
-            }
-
-        }else if(message == "robo/esquerda"){
-
-            retorno = "conectado";
-            info = "robo/esquerda";
-            if(m_client->publish(info, retorno) != -1){
-                ui->tabWidget->setTabEnabled(3, true);
-                ui->status_label_E->setStyleSheet("color: rgb(85, 170, 0);");
-            }
         }
     }
 
@@ -202,6 +238,14 @@ void inmoov_qt::on_R_button_executar_clicked(){
             ui->R_button_executar->setText(tr("Executar"));
 
     }
+
+}
+
+void inmoov_qt::on_R_button_ping_clicked(){
+
+    ui->R_button_ping->setEnabled(false);
+    m_client->requestPing();
+    ui->R_info->insertPlainText("PING: Enviado\n");
 
 }
 
@@ -278,12 +322,6 @@ void inmoov_qt::on_C_button_cancelar_clicked(){
 
 /* SYSTEM */
 
-void inmoov_qt::on_O_button_add_clicked(){
-
-    ui->tabWidget->addTab(new QLabel("Texto"), QString("novo"));
-
-}
-
 void inmoov_qt::on_O_ativar_D_clicked(){
 
     if(ui->O_ativar_D->isChecked()){
@@ -320,12 +358,9 @@ void inmoov_qt::on_O_ativar_C_clicked(){
 
 }
 
+void inmoov_qt::on_O_button_add_clicked(){
 
-void inmoov_qt::on_R_button_ping_clicked(){
-
-    ui->R_button_ping->setEnabled(false);
-    m_client->requestPing();
-    ui->R_info->insertPlainText("PING: Enviado\n");
+    ui->tabWidget->addTab(new QLabel("Texto"), QString("novo"));
 
 }
 
