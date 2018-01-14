@@ -107,9 +107,9 @@ void inmoov_qt::updateLogStateChange(){
         ui->R_info->insertPlainText("Conectado\n");
 
         // Inscrição no topico
-        QString info = "robo";
+        QString info = "robot";
         if (!(m_client->subscribe(info))){
-            QMessageBox::critical(this, QLatin1String("Error"), QLatin1String("Erro ao criar o topico robo!"));
+            QMessageBox::critical(this, QLatin1String("Error"), QLatin1String("Erro ao criar o topico robot!"));
             return;
         }
 
@@ -133,9 +133,7 @@ void inmoov_qt::setDevice(const QByteArray &message, const QMqttTopicName &topic
     QByteArray retorno;
     std::string recebido;
 
-    info = "robo";
-    if(topic == info){
-
+    if((topic == QString("/robot/")) || (topic == QString("/robot")) || (topic == QString("robot/")) || (topic == QString("robot"))){
 
         char* msg = new char[message.toStdString().length()+1];
         memcpy(msg, message.toStdString().c_str(), message.toStdString().length() + 1);
@@ -143,35 +141,84 @@ void inmoov_qt::setDevice(const QByteArray &message, const QMqttTopicName &topic
         std::istringstream is(msg);
         getline(is, recebido, '/');
 
-        if(recebido.compare("robo") == 0){
+        if(recebido.compare("") == 0)
+            getline(is, recebido, '/');
+
+        if(recebido.compare("robot") == 0){
 
             getline(is, recebido, '/');
 
-            if(recebido.compare("cabeca") == 0){
+            if(recebido.compare("head") == 0){
 
                 retorno = "conectado";
-                info = "robo/cabeca";
+                info = "robot/head";
                 if(m_client->publish(info, retorno) != -1){
                     ui->tabWidget->setTabEnabled(2, true);
                     ui->status_label_C->setStyleSheet("color: rgb(85, 170, 0);");
                 }
 
-            }else if(recebido.compare("direita") == 0){
+            }else if(recebido.compare("right") == 0){
 
                 retorno = "conectado";
-                info = "robo/direita";
+                info = "robot/right";
                 if(m_client->publish(info, retorno) != -1){
                     ui->tabWidget->setTabEnabled(1, true);
                     ui->status_label_D->setStyleSheet("color: rgb(85, 170, 0);");
                 }
 
-            }else if(recebido.compare("esquerda") == 0){
+            }else if(recebido.compare("left") == 0){
 
                 retorno = "conectado";
-                info = "robo/esquerda";
+                info = "robot/left";
                 if(m_client->publish(info, retorno) != -1){
                     ui->tabWidget->setTabEnabled(3, true);
                     ui->status_label_E->setStyleSheet("color: rgb(85, 170, 0);");
+                }
+
+            }else if(recebido.compare("currents") == 0){
+
+                info = QString(message);
+                if(!(m_client->subscribe(info))){
+                    QMessageBox::critical(this, QLatin1String("Error"), QLatin1String("Erro ao criar o topico robot!"));
+                    return;
+                }
+
+                if(getline(is, recebido, '/')){
+
+                    if(recebido.compare("0") == 0){
+                        ui->C_lcd_1->setEnabled(true);
+                        ui->C_lcd_1->setStyleSheet("background-color: rgb(185, 255, 191)");
+                        ui->C_lcd_1->setPalette(Qt::darkGray);
+                    }else if(recebido.compare("1") == 0){
+                        ui->C_lcd_2->setEnabled(true);
+                        ui->C_lcd_2->setStyleSheet("background-color: rgb(185, 255, 191)");
+                        ui->C_lcd_2->setPalette(Qt::darkGray);
+                    }else if(recebido.compare("2") == 0){
+                        ui->D_lcd_1->setEnabled(true);
+                        ui->D_lcd_1->setStyleSheet("background-color: rgb(185, 255, 191)");
+                        ui->D_lcd_1->setPalette(Qt::darkGray);
+                    }else if(recebido.compare("3") == 0){
+                        ui->D_lcd_2->setEnabled(true);
+                        ui->D_lcd_2->setStyleSheet("background-color: rgb(185, 255, 191)");
+                        ui->D_lcd_2->setPalette(Qt::darkGray);
+                    }else if(recebido.compare("4") == 0){
+                        ui->E_lcd_1->setEnabled(true);
+                        ui->E_lcd_1->setStyleSheet("background-color: rgb(185, 255, 191)");
+                        ui->E_lcd_1->setPalette(Qt::darkGray);
+                    }else if(recebido.compare("5") == 0){
+                        ui->E_lcd_2->setEnabled(true);
+                        ui->E_lcd_2->setStyleSheet("background-color: rgb(185, 255, 191)");
+                        ui->E_lcd_2->setPalette(Qt::darkGray);
+                    }else if(recebido.compare("6") == 0){
+
+                    }else{
+                        QMessageBox::critical(this, QLatin1String("Error"), QLatin1String("Informacoes do servo nao encontradas\nFavor cadastrar o novo servo."));
+                    }
+
+                }else{
+
+                    QMessageBox::critical(this, QLatin1String("Error"), QLatin1String("Erro ao cadastrar novo servo!\nFalta informar o Id do servo após \"robot/currents/\""));
+
                 }
 
             }else{
@@ -179,22 +226,78 @@ void inmoov_qt::setDevice(const QByteArray &message, const QMqttTopicName &topic
                 recebido_Q = QString::fromStdString(recebido);
                 newTab *myNewTab = new newTab();
 
-                QFrame* caixa = new QFrame(myNewTab);
-                QRadioButton* Opcao_1 = new QRadioButton(caixa);
-                Opcao_1->setText(QString(recebido_Q));
+                //QFrame* caixa = new QFrame(myNewTab);
+                //QRadioButton* Opcao_1 = new QRadioButton(caixa);
+                //Opcao_1->setText(QString(recebido_Q));
 
                 ui->tabWidget->addTab(myNewTab, QString(recebido_Q));
                 if(getline(is, recebido, '/')){
 
-                    recebido_Q = QString::fromStdString(recebido);
-                    QRadioButton* opcao = new QRadioButton(caixa);
-                    opcao->setText(QString(recebido_Q));
+                    //recebido_Q = QString::fromStdString(recebido);
+                    //QRadioButton* opcao = new QRadioButton(caixa);
+                    //opcao->setText(QString(recebido_Q));
 
                 }
 
             }
 
         }
+
+    }else{
+
+        info = topic.name();
+
+        char* msg = new char[info.toStdString().length()+1];
+        memcpy(msg, info.toStdString().c_str(), info.toStdString().length() + 1);
+
+        std::istringstream is(msg);
+        getline(is, recebido, '/');
+
+        if(recebido.compare("") == 0)
+            getline(is, recebido, '/');
+
+        if(recebido.compare("robot") == 0){
+
+            getline(is, recebido, '/');
+
+            if(recebido.compare("currents") == 0){
+
+                getline(is, recebido, '/');
+                recebido_Q = QString::fromStdString(recebido);
+                int servo = recebido_Q.toInt();
+
+                switch (servo) {
+                case 0:
+                    std::cout << "numero: 0" << std::endl;
+                    ui->C_lcd_1->display(message.toDouble());
+                    break;
+                case 1:
+                    std::cout << "numero: 1" << std::endl;
+                    break;
+                case 2:
+                    std::cout << "numero: 2" << std::endl;
+                    break;
+                case 3:
+                    std::cout << "numero: 3" << std::endl;
+                    break;
+                case 4:
+                    std::cout << "numero: 4" << std::endl;
+                    break;
+                case 5:
+                    std::cout << "numero: 5" << std::endl;
+                    break;
+                case 6:
+                    std::cout << "numero: 6" << std::endl;
+                    break;
+                default:
+                    QMessageBox::critical(this, QLatin1String("Error"), QLatin1String("Esse servo nao deveria existir. \nFalta cadastrar uma funcao."));
+                    break;
+                }
+
+            }
+        }
+
+
     }
 
 }
@@ -217,9 +320,9 @@ void inmoov_qt::on_R_button_executar_clicked(){
         info = "Opcao: " + ui->R_box_comandos->currentText() + "\n";
         ui->R_info->insertPlainText(info);
 
-        QString topic1 = "robo/cabeca";
-        QString topic2 = "robo/direita";
-        QString topic3 = "robo/esquerda";
+        QString topic1 = "robot/head";
+        QString topic2 = "robot/right";
+        QString topic3 = "robot/left";
         if ((m_client->publish(topic1, message) == -1) || (m_client->publish(topic2, message) == -1) || (m_client->publish(topic3, message) == -1))
             ui->R_info->insertPlainText("Erro ao enviar a mensagem.\n");
 
@@ -229,9 +332,9 @@ void inmoov_qt::on_R_button_executar_clicked(){
 
 
         message = "stop";
-        QString topic1 = "robo/cabeca";
-        QString topic2 = "robo/direita";
-        QString topic3 = "robo/esquerda";
+        QString topic1 = "robot/head";
+        QString topic2 = "robot/right";
+        QString topic3 = "robot/left";
         if ((m_client->publish(topic1, message) == -1) || (m_client->publish(topic2, message) == -1) || (m_client->publish(topic3, message) == -1))
             ui->R_info->insertPlainText("Erro ao parar execução.\n");
         else
@@ -294,7 +397,7 @@ void inmoov_qt::on_C_button_executar_toggled(bool checked){
 
         }
 
-        QString topic = "robo/cabeca";
+        QString topic = "robot/head";
         if (m_client->publish(topic, message) == -1){
             ui->C_info->insertPlainText("Erro ao enviar a mensagem.\n");
             ui->C_button_executar->setChecked(false);
@@ -310,7 +413,7 @@ void inmoov_qt::on_C_button_cancelar_clicked(){
     ui->C_info->insertPlainText("**Execução cancelada.\n");
 
     QByteArray message = "stop";
-    QString topic = "robo/cabeca";
+    QString topic = "robot/head";
     if (m_client->publish(topic, message) == -1){
         ui->C_info->insertPlainText("Erro ao parar execução.\n");
         ui->C_button_executar->setChecked(true);
