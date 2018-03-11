@@ -223,6 +223,8 @@ void inmoov_qt::setDevice(const QByteArray &message, const QMqttTopicName &topic
 
             }else{
 
+                QMessageBox::critical(this, QLatin1String("Error"), QLatin1String("Mensagem recebida invalida."));
+/*
                 recebido_Q = QString::fromStdString(recebido);
                 newTab *myNewTab = new newTab();
 
@@ -238,7 +240,7 @@ void inmoov_qt::setDevice(const QByteArray &message, const QMqttTopicName &topic
                     //opcao->setText(QString(recebido_Q));
 
                 }
-
+*/
             }
 
         }
@@ -266,25 +268,30 @@ void inmoov_qt::setDevice(const QByteArray &message, const QMqttTopicName &topic
                 recebido_Q = QString::fromStdString(recebido);
                 int servo = recebido_Q.toInt();
 
-                switch (servo) {
+                switch (servo){
                 case 0:
                     std::cout << "numero: 0" << std::endl;
                     ui->C_lcd_1->display(message.toDouble());
                     break;
                 case 1:
                     std::cout << "numero: 1" << std::endl;
+                    ui->C_lcd_2->display(message.toDouble());
                     break;
                 case 2:
                     std::cout << "numero: 2" << std::endl;
+                    ui->D_lcd_1->display(message.toDouble());
                     break;
                 case 3:
                     std::cout << "numero: 3" << std::endl;
+                    ui->D_lcd_2->display(message.toDouble());
                     break;
                 case 4:
                     std::cout << "numero: 4" << std::endl;
+                    ui->E_lcd_1->display(message.toDouble());
                     break;
                 case 5:
                     std::cout << "numero: 5" << std::endl;
+                    ui->E_lcd_2->display(message.toDouble());
                     break;
                 case 6:
                     std::cout << "numero: 6" << std::endl;
