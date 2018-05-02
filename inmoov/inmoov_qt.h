@@ -16,6 +16,8 @@
 #include <QtMqtt/QMqttClient>
 #include <QtMqtt/QMqttTopicName>
 #include <QMqttClient>
+// Delay
+#include <QThread>
 
 namespace Ui {
 class inmoov_qt;

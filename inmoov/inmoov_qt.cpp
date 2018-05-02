@@ -150,97 +150,126 @@ void inmoov_qt::setDevice(const QByteArray &message, const QMqttTopicName &topic
 
             if(recebido.compare("head") == 0){
 
-                retorno = "conectado";
-                info = "robot/head";
-                if(m_client->publish(info, retorno) != -1){
+                getline(is, recebido, '/');
+                if(recebido.compare("currents") == 0){
+
+                    info = QString(message);
+                    if(!(m_client->subscribe(info))){
+                        QMessageBox::critical(this, QLatin1String("Error"), QLatin1String("Erro ao criar o topico robot!"));
+                        return;
+                    }
+
+                    if(getline(is, recebido, '/')){
+
+                        if(recebido.compare("vert") == 0){
+                            ui->C_lcd_1->setEnabled(true);
+                            ui->C_lcd_1->setStyleSheet("background-color: rgb(185, 255, 191)");
+                            ui->C_lcd_1->setPalette(Qt::darkGray);
+                            ui->R_info->insertPlainText("Leitura de corrente vertical da cabeca conectado\n");
+                        }else if(recebido.compare("horz") == 0){
+                            ui->C_lcd_2->setEnabled(true);
+                            ui->C_lcd_2->setStyleSheet("background-color: rgb(185, 255, 191)");
+                            ui->C_lcd_2->setPalette(Qt::darkGray);
+                            ui->R_info->insertPlainText("Leitura de corrente horizontal da cabeca conectado\n");
+                        }else{
+                            QMessageBox::critical(this, QLatin1String("Error"), QLatin1String("Informacoes do servo nao encontradas\nFavor cadastrar o novo servo."));
+                        }
+
+                    }
+
+                }else{
                     ui->tabWidget->setTabEnabled(2, true);
                     ui->status_label_C->setStyleSheet("color: rgb(85, 170, 0);");
+                    ui->R_info->insertPlainText("Cabeca conectada\n");
+                    ui->C_info->insertPlainText("Conectado\n");
+                    //retorno = "conectado";
+                    //info = "robot/head";
+                    //if(m_client->publish(info, retorno) != -1){}
                 }
 
             }else if(recebido.compare("right") == 0){
 
-                retorno = "conectado";
-                info = "robot/right";
-                if(m_client->publish(info, retorno) != -1){
+                getline(is, recebido, '/');
+                if(recebido.compare("currents") == 0){
+
+                    info = QString(message);
+                    if(!(m_client->subscribe(info))){
+                        QMessageBox::critical(this, QLatin1String("Error"), QLatin1String("Erro ao criar o topico robot!"));
+                        return;
+                    }
+
+                    if(getline(is, recebido, '/')){
+
+                        if(recebido.compare("vert") == 0){
+                            ui->D_lcd_1->setEnabled(true);
+                            ui->D_lcd_1->setStyleSheet("background-color: rgb(185, 255, 191)");
+                            ui->D_lcd_1->setPalette(Qt::darkGray);
+                            ui->R_info->insertPlainText("Leitura de corrente vertical do braco direito conectado\n");
+                        }else if(recebido.compare("horz") == 0){
+                            ui->D_lcd_2->setEnabled(true);
+                            ui->D_lcd_2->setStyleSheet("background-color: rgb(185, 255, 191)");
+                            ui->D_lcd_2->setPalette(Qt::darkGray);
+                            ui->R_info->insertPlainText("Leitura de corrente horizontal do braco esquerdo conectado\n");
+                        }else{
+                            QMessageBox::critical(this, QLatin1String("Error"), QLatin1String("Informacoes do servo nao encontradas\nFavor cadastrar o novo servo."));
+                        }
+
+                    }
+
+                }else{
                     ui->tabWidget->setTabEnabled(1, true);
                     ui->status_label_D->setStyleSheet("color: rgb(85, 170, 0);");
+                    ui->R_info->insertPlainText("Braco direito conectado\n");
+                    ui->D_info->insertPlainText("Conectado\n");
+                    //retorno = "conectado";
+                    //info = "robot/right";
+                    //if(m_client->publish(info, retorno) != -1){}
                 }
 
             }else if(recebido.compare("left") == 0){
 
-                retorno = "conectado";
-                info = "robot/left";
-                if(m_client->publish(info, retorno) != -1){
-                    ui->tabWidget->setTabEnabled(3, true);
-                    ui->status_label_E->setStyleSheet("color: rgb(85, 170, 0);");
-                }
+                getline(is, recebido, '/');
+                if(recebido.compare("currents") == 0){
 
-            }else if(recebido.compare("currents") == 0){
+                    info = QString(message);
+                    if(!(m_client->subscribe(info))){
+                        QMessageBox::critical(this, QLatin1String("Error"), QLatin1String("Erro ao criar o topico robot!"));
+                        return;
+                    }
 
-                info = QString(message);
-                if(!(m_client->subscribe(info))){
-                    QMessageBox::critical(this, QLatin1String("Error"), QLatin1String("Erro ao criar o topico robot!"));
-                    return;
-                }
+                    if(getline(is, recebido, '/')){
 
-                if(getline(is, recebido, '/')){
+                        if(recebido.compare("vert") == 0){
+                            ui->E_lcd_1->setEnabled(true);
+                            ui->E_lcd_1->setStyleSheet("background-color: rgb(185, 255, 191)");
+                            ui->E_lcd_1->setPalette(Qt::darkGray);
+                            ui->R_info->insertPlainText("Leitura de corrente vertical do braco esquerdo conectado\n");
+                        }else if(recebido.compare("horz") == 0){
+                            ui->E_lcd_2->setEnabled(true);
+                            ui->E_lcd_2->setStyleSheet("background-color: rgb(185, 255, 191)");
+                            ui->E_lcd_2->setPalette(Qt::darkGray);
+                            ui->R_info->insertPlainText("Leitura de corrente horizontal do braco esquerdo conectado\n");
+                        }else{
+                            QMessageBox::critical(this, QLatin1String("Error"), QLatin1String("Informacoes do servo nao encontradas\nFavor cadastrar o novo servo."));
+                        }
 
-                    if(recebido.compare("0") == 0){
-                        ui->C_lcd_1->setEnabled(true);
-                        ui->C_lcd_1->setStyleSheet("background-color: rgb(185, 255, 191)");
-                        ui->C_lcd_1->setPalette(Qt::darkGray);
-                    }else if(recebido.compare("1") == 0){
-                        ui->C_lcd_2->setEnabled(true);
-                        ui->C_lcd_2->setStyleSheet("background-color: rgb(185, 255, 191)");
-                        ui->C_lcd_2->setPalette(Qt::darkGray);
-                    }else if(recebido.compare("2") == 0){
-                        ui->D_lcd_1->setEnabled(true);
-                        ui->D_lcd_1->setStyleSheet("background-color: rgb(185, 255, 191)");
-                        ui->D_lcd_1->setPalette(Qt::darkGray);
-                    }else if(recebido.compare("3") == 0){
-                        ui->D_lcd_2->setEnabled(true);
-                        ui->D_lcd_2->setStyleSheet("background-color: rgb(185, 255, 191)");
-                        ui->D_lcd_2->setPalette(Qt::darkGray);
-                    }else if(recebido.compare("4") == 0){
-                        ui->E_lcd_1->setEnabled(true);
-                        ui->E_lcd_1->setStyleSheet("background-color: rgb(185, 255, 191)");
-                        ui->E_lcd_1->setPalette(Qt::darkGray);
-                    }else if(recebido.compare("5") == 0){
-                        ui->E_lcd_2->setEnabled(true);
-                        ui->E_lcd_2->setStyleSheet("background-color: rgb(185, 255, 191)");
-                        ui->E_lcd_2->setPalette(Qt::darkGray);
-                    }else if(recebido.compare("6") == 0){
-
-                    }else{
-                        QMessageBox::critical(this, QLatin1String("Error"), QLatin1String("Informacoes do servo nao encontradas\nFavor cadastrar o novo servo."));
                     }
 
                 }else{
-
-                    QMessageBox::critical(this, QLatin1String("Error"), QLatin1String("Erro ao cadastrar novo servo!\nFalta informar o Id do servo após \"robot/currents/\""));
-
+                    ui->tabWidget->setTabEnabled(3, true);
+                    ui->status_label_E->setStyleSheet("color: rgb(85, 170, 0);");
+                    ui->R_info->insertPlainText("Braco esquerdo conectado\n");
+                    ui->E_info->insertPlainText("Conectado\n");
+                    //retorno = "conectado";
+                    //info = "robot/left";
+                    //if(m_client->publish(info, retorno) != -1){}
                 }
 
             }else{
 
-                QMessageBox::critical(this, QLatin1String("Error"), QLatin1String("Mensagem recebida invalida."));
-/*
-                recebido_Q = QString::fromStdString(recebido);
-                newTab *myNewTab = new newTab();
+                //QMessageBox::critical(this, QLatin1String("Error"), QLatin1String("Mensagem recebida invalida."));
+                ui->R_info->insertPlainText("Mensagem recebida invalida.\n");
 
-                //QFrame* caixa = new QFrame(myNewTab);
-                //QRadioButton* Opcao_1 = new QRadioButton(caixa);
-                //Opcao_1->setText(QString(recebido_Q));
-
-                ui->tabWidget->addTab(myNewTab, QString(recebido_Q));
-                if(getline(is, recebido, '/')){
-
-                    //recebido_Q = QString::fromStdString(recebido);
-                    //QRadioButton* opcao = new QRadioButton(caixa);
-                    //opcao->setText(QString(recebido_Q));
-
-                }
-*/
             }
 
         }
@@ -262,46 +291,52 @@ void inmoov_qt::setDevice(const QByteArray &message, const QMqttTopicName &topic
 
             getline(is, recebido, '/');
 
-            if(recebido.compare("currents") == 0){
+            if(recebido.compare("head") == 0){
 
                 getline(is, recebido, '/');
-                recebido_Q = QString::fromStdString(recebido);
-                int servo = recebido_Q.toInt();
+                if(recebido.compare("currents") == 0){
 
-                switch (servo){
-                case 0:
-                    std::cout << "numero: 0" << std::endl;
-                    ui->C_lcd_1->display(message.toDouble());
-                    break;
-                case 1:
-                    std::cout << "numero: 1" << std::endl;
-                    ui->C_lcd_2->display(message.toDouble());
-                    break;
-                case 2:
-                    std::cout << "numero: 2" << std::endl;
-                    ui->D_lcd_1->display(message.toDouble());
-                    break;
-                case 3:
-                    std::cout << "numero: 3" << std::endl;
-                    ui->D_lcd_2->display(message.toDouble());
-                    break;
-                case 4:
-                    std::cout << "numero: 4" << std::endl;
-                    ui->E_lcd_1->display(message.toDouble());
-                    break;
-                case 5:
-                    std::cout << "numero: 5" << std::endl;
-                    ui->E_lcd_2->display(message.toDouble());
-                    break;
-                case 6:
-                    std::cout << "numero: 6" << std::endl;
-                    break;
-                default:
-                    QMessageBox::critical(this, QLatin1String("Error"), QLatin1String("Esse servo nao deveria existir. \nFalta cadastrar uma funcao."));
-                    break;
+                    getline(is, recebido, '/');
+                    recebido_Q = QString::fromStdString(recebido);
+                    if(recebido_Q == "vert"){
+                        ui->C_lcd_1->display(message.toDouble());
+                    }else if(recebido_Q == "horz"){
+                        ui->C_lcd_2->display(message.toDouble());
+                    }
                 }
 
+            }else if(recebido.compare("right") == 0){
+
+                getline(is, recebido, '/');
+                if(recebido.compare("currents") == 0){
+
+                    getline(is, recebido, '/');
+                    recebido_Q = QString::fromStdString(recebido);
+                    if(recebido_Q == "vert"){
+                        ui->D_lcd_1->display(message.toDouble());
+                    }else if(recebido_Q == "horz"){
+                        ui->D_lcd_2->display(message.toDouble());
+                    }
+                }
+
+            }else if(recebido.compare("left") == 0){
+
+                getline(is, recebido, '/');
+                if(recebido.compare("currents") == 0){
+
+                    getline(is, recebido, '/');
+                    recebido_Q = QString::fromStdString(recebido);
+                    if(recebido_Q == "vert"){
+                        ui->E_lcd_1->display(message.toDouble());
+                    }else if(recebido_Q == "horz"){
+                        ui->E_lcd_2->display(message.toDouble());
+                    }
+                }
+
+            }else{
+                QMessageBox::critical(this, QLatin1String("Error"), QLatin1String("Esse servo nao deveria existir. \nFalta cadastrar uma funcao."));
             }
+
         }
 
 
@@ -365,6 +400,7 @@ void inmoov_qt::on_C_button_executar_toggled(bool checked){
 
     QString info;
     QByteArray message;
+    QString topic;
 
     ui->C_button_executar->setEnabled(false);
     if(checked){
@@ -375,40 +411,100 @@ void inmoov_qt::on_C_button_executar_toggled(bool checked){
         ui->C_info->insertPlainText("Executando acao...\n");
         if(ui->C_opcao_outros->isChecked()){
 
-            message = ui->C_box_cabeca->currentText().toUtf8();
-            info = "Opcao: " + ui->C_box_cabeca->currentText();
-            ui->C_info->insertPlainText(info);
+            if(ui->C_box_cabeca->currentText().toUtf8() == "Movimento - Sim"){
 
-            if(ui->C_check_continuo->isChecked()){
+                info = "Opcao: " + ui->C_box_cabeca->currentText();
+                ui->C_info->insertPlainText(info);
 
-                message = message + " [continuo]";
-                ui->C_info->insertPlainText(" [Continuo]\n");
+                int continuo = 0;
+                int i = 1;
+                if(ui->C_check_continuo->isChecked()){
+                    continuo = 1;
+                    ui->C_info->insertPlainText(" [Continuo]\n");
+                }else
+                    ui->C_info->insertPlainText("\n");
 
-            }else{
+                topic = "robot/head/horz";
+                message = "50";
+                if (m_client->publish(topic, message) == -1){
+                    ui->C_info->insertPlainText("Erro ao enviar a mensagem.\n");
+                    ui->C_button_executar->setChecked(false);
+                    ui->C_button_executar->setEnabled(true);
+                }
 
-                message = message + " [simples]";
-                ui->C_info->insertPlainText(" [Simples]\n");
+                while((ui->C_button_executar->isChecked()) && i < 4){
+
+                    topic = "robot/head/vert";
+                    message = "100";
+                    if (m_client->publish(topic, message) == -1){
+                        ui->C_info->insertPlainText("Erro ao enviar a mensagem.\n");
+                        ui->C_button_executar->setChecked(false);
+                        ui->C_button_executar->setEnabled(true);
+                    }
+
+
+                    topic = "robot/head/vert";
+                    message = "0";
+                    if (m_client->publish(topic, message) == -1){
+                        ui->C_info->insertPlainText("Erro ao enviar a mensagem.\n");
+                        ui->C_button_executar->setChecked(false);
+                        ui->C_button_executar->setEnabled(true);
+                    }
+
+                    if(continuo == 0){
+                        i++;
+                    }else
+                        continuo = 0;
+
+                    if(ui->C_button_executar->isChecked())
+                        QThread::msleep(2000);
+
+                }
 
             }
 
         }else if(ui->C_opcao_esperar->isChecked()){
             info = "Opcao: " + ui->C_opcao_esperar->text().toUtf8() + "\n";
-            message = ui->C_opcao_esperar->text().toUtf8();
             ui->C_info->insertPlainText(info);
+
+            topic = "robot/head/vert";
+            message = "50";
+            if (m_client->publish(topic, message) == -1){
+                ui->C_info->insertPlainText("Erro ao enviar a mensagem.\n");
+                ui->C_button_executar->setChecked(false);
+                ui->C_button_executar->setEnabled(true);
+            }
+
+            topic = "robot/head/horz";
+            message = "50";
+            if (m_client->publish(topic, message) == -1){
+                ui->C_info->insertPlainText("Erro ao enviar a mensagem.\n");
+                ui->C_button_executar->setChecked(false);
+                ui->C_button_executar->setEnabled(true);
+            }
 
         }else if(ui->C_opcao_observar->isChecked()){
 
             info = "Opcao: " + ui->C_opcao_observar->text().toUtf8() + "\n";
-            message = ui->C_opcao_observar->text().toUtf8();
             ui->C_info->insertPlainText(info);
 
-        }
 
-        QString topic = "robot/head";
-        if (m_client->publish(topic, message) == -1){
-            ui->C_info->insertPlainText("Erro ao enviar a mensagem.\n");
-            ui->C_button_executar->setChecked(false);
-            ui->C_button_executar->setEnabled(true);
+            topic = "robot/head/vert";
+            message = "0";
+            if (m_client->publish(topic, message) == -1){
+                ui->C_info->insertPlainText("Erro ao enviar a mensagem.\n");
+                ui->C_button_executar->setChecked(false);
+                ui->C_button_executar->setEnabled(true);
+            }
+
+            topic = "robot/head/horz";
+            message = "50";
+            if (m_client->publish(topic, message) == -1){
+                ui->C_info->insertPlainText("Erro ao enviar a mensagem.\n");
+                ui->C_button_executar->setChecked(false);
+                ui->C_button_executar->setEnabled(true);
+            }
+
         }
 
     }
@@ -419,14 +515,14 @@ void inmoov_qt::on_C_button_cancelar_clicked(){
 
     ui->C_info->insertPlainText("**Execução cancelada.\n");
 
-    QByteArray message = "stop";
-    QString topic = "robot/head";
-    if (m_client->publish(topic, message) == -1){
-        ui->C_info->insertPlainText("Erro ao parar execução.\n");
-        ui->C_button_executar->setChecked(true);
-    }else{
+    //QByteArray message = "stop";
+    //QString topic = "robot/head/vert";
+    //if (m_client->publish(topic, message) == -1){
+    //    ui->C_info->insertPlainText("Erro ao parar execução.\n");
+    //    ui->C_button_executar->setChecked(true);
+    //}else{
         ui->C_button_executar->setEnabled(true);
-    }
+    //}
 
 }
 
